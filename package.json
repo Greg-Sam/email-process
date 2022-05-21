@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.4",
+    "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.16"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "name": "email-process",
+  "description": "[![License: ODbL](https://img.shields.io/badge/License-PDDL-brightgreen.svg)](https://opendatacommons.org/licenses/pddl/)\r   # Email-Process\r   This is a workspace for managing the creation of HTML emails, connecting them to a user database and sending emails using nodemailMailer.\r   ***\r   ## Table of Contents\r   [Installation instructions](#instalation-instructions)  \r   [Usage description](#usage-description)  \r   [License information](#license-information)  \r   [Contributors](#contributors)  \r   [Technology used](#technology-used)  \r   [Testing procedure](#testing-procedure)  \r   [Questions](#questions)  \r   ## Instalation instructions\r   This is a node.js app that uses an express server. Clone this repo and run npm install. Then hookup your own backend and start creating amazing emails to wow your mailing list.  \r   ## Usage description",
+  "version": "1.0.0",
+  "main": "nodeMailer.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Greg-Sam/email-process.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Greg-Sam/email-process/issues"
+  },
+  "homepage": "https://github.com/Greg-Sam/email-process#readme"
+}
