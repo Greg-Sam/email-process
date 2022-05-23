@@ -1,10 +1,17 @@
 const router = require('express').Router()
-const users = require('../users.json')
+// const users = require('../users.json')
 require('dotenv').config()
 const nodemailer = require("nodemailer");
+const { User } = require('../models')
+const createContent = require('../createContent')
+
+
+
 
   // send mail with defined transport object
-  const sendEmail = async (user, transporter) => {
+  const sendEmail = async (user, 
+    subject, content, 
+    transporter) => {
     let email = user.email
     let userName = user.userName
   try {
@@ -12,32 +19,27 @@ const nodemailer = require("nodemailer");
     let info = await transporter.sendMail({
       from: '"beachpickem" <beachpickem@beachvolleyblog.net>', // sender address
       to: email,
-      subject: "Four Tournaments start tomorrow!",
-      html: `<p>Hi ${userName},</p>
-<p>This is Greg from the Beach Volley Blog, with a reminder that there is an exciting weekend of beach volleyball ahead. That means a chance for you to play Beach Picke'em!</p>
-<p>The men's and women's Challenge level tournaments in Kusadasi start Thursday morning in Turkey (don't forget about the time change from where you are!) and there are Future level tournaments playing in Madrid (Women) and Rhodes (Men), too. That means 152 beach volleyball teams will be playing on the Pro Beach Tour at the same time.</p>
-<p>Can you pick the teams that will still be playing on Saturday? Don't miss your chance to prove it by playing Beach Pick'em at <a href="https://beachpickem.beachvolleyblog.net/#/">beachpickem.beachvolleyblog.net</a>.</p>
-<img src="https://beachvolleyblog.net/wp-content/uploads/2022/03/Cherif-and-Ahmed-celebrate-Rosarito.png" alt="Cherif and Ahmed">
-<p>Good luck,</p>
-<p>Greg</p>` // html body
+      subject: subject,
+      html: content
     });
 
-    console.log(`Message sent to ${userName}: %s`, info.messageId);
+    console.log(`Message sent to ${userName}: %s`, 
+    info.messageId
+    );
 
   } catch (error) {
     console.log(error)
+    
   }
   }
 
 
 // async..await is not allowed in global scope, must use a wrapper
-async function htmlEmail(data) {
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
+async function htmlEmail(users) {
   console.log(`creating nodemailer transporter`)
 
   let transporter = nodemailer.createTransport({
-    pooled: true,
+    pool: true,
     name: 'beachvolleyblog.net',
     host: "mail.beachvolleyblog.net",
     port: 465,
@@ -58,14 +60,18 @@ transporter.verify(function (error, success) {
       console.log(error);
     } else {
       console.log("Server is ready to take our messages");
-      let users = data.users
+    
      
       const forLoop = async () => {
         console.log('Start')
 
         for (let i = 0; i < users.length; i++) {
+          console.log(`${i} of ${users.length}`)
           const user = users[i]
-        await sendEmail(user, transporter)
+         let content = createContent.createContent(user)
+          await sendEmail(user, 
+            content.subjectLine, content.emailContent, 
+            transporter)
           
         }
 
@@ -86,6 +92,7 @@ transporter.verify(function (error, success) {
 
 router.put('/test/', async (req, res) => {
 console.log('hello world')
+  const users = await User.find({})
 
 htmlEmail(users)
 
